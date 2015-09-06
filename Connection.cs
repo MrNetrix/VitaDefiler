@@ -366,6 +366,7 @@ namespace VitaDefiler.PSM
                         catch (Exception e)
                         {
                             Defiler.ErrLine(e.ToString()); // We want to know what went wrong.
+                            DebugLogClient.Stop();
                         }
                     }
                 })).Start();

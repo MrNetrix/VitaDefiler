@@ -15,6 +15,11 @@ namespace VitaDefiler
         static TextWriter _errstream = Console.Error;
         static TextWriter _msgstream = Console.Out;
 
+        public static void Log(string format, params object[] parameters)
+        {
+            _logstream.Write(string.Format(format, parameters));
+        }
+
         public static void LogLine(string format, params object[] parameters)
         {
             _logstream.WriteLine(string.Format(format, parameters));
@@ -175,6 +180,25 @@ namespace VitaDefiler
                 scripting.ParseScript(dev, script, args);
             }
 
+            try
+            {
+                DebugLogClient.Start();
+
+                RunScript(dev, mods);
+            }
+            catch (Exception e)
+            {
+                Defiler.ErrLine("--- An unhandled exception has occurred! ---");
+                Defiler.ErrLine(e.ToString());
+            }
+            finally
+            {
+                DebugLogClient.Stop();
+            }
+        }
+
+        private static void RunScript(Device dev, List<IModule> mods)
+        {
             // wait for commands
             Console.WriteLine("Ready for commands. Type 'help' for a listing.");
             StringReader reader = null;

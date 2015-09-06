@@ -55,6 +55,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DebugLogClient.cs" />
     <Compile Include="Device.cs" />
     <Compile Include="Exploit.cs" />
     <Compile Include="Modules\Code.cs" />
