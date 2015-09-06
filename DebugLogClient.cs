@@ -58,22 +58,32 @@ namespace VitaDefiler
 
         private static void Receive(IAsyncResult ar)
         {
-            if (udp != null)
+            try
             {
-                byte[] bytes = udp.EndReceive(ar, ref ip);
-                string message = Encoding.ASCII.GetString(bytes).Replace(NEW_LINE, NEW_LINE_REPLACE);
-
-                if (firstMessage)
+                if (udp != null)
                 {
-                    Defiler.Log(LINE_PREFIX + message);
-                    firstMessage = false;
-                }
-                else
-                {
-                    Defiler.Log(message);
-                }
+                    byte[] bytes = udp.EndReceive(ar, ref ip);
+                    string message = Encoding.ASCII.GetString(bytes).Replace(NEW_LINE, NEW_LINE_REPLACE);
 
-                StartListening();
+                    if (firstMessage)
+                    {
+                        Defiler.Log(LINE_PREFIX + message);
+                        firstMessage = false;
+                    }
+                    else
+                    {
+                        Defiler.Log(message);
+                    }
+
+                    StartListening();
+                }
+            }
+            catch
+            {
+                if (udp != null)
+                {
+                    Stop();
+                }
             }
         }
     }
