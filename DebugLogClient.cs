@@ -11,11 +11,11 @@ namespace VitaDefiler
         const int PORT_NUMBER = 18194;
         const string LINE_PREFIX = "[Vita]  ";
         const string NEW_LINE = "\n";
-        const string NEW_LINE_REPLACE = NEW_LINE + LINE_PREFIX + NEW_LINE;
+        const string NEW_LINE_REPLACE = NEW_LINE + LINE_PREFIX;
 
         private static UdpClient udp;
         private static IPEndPoint ip = new IPEndPoint(IPAddress.Any, PORT_NUMBER);
-        private static bool lastHadNewLine = true;
+        private static bool firstMessage = true;
 
         public static void Start()
         {
@@ -61,12 +61,17 @@ namespace VitaDefiler
             if (udp != null)
             {
                 byte[] bytes = udp.EndReceive(ar, ref ip);
-                string message = Encoding.ASCII.GetString(bytes);
-                string displayMsg = message.Replace(NEW_LINE, NEW_LINE_REPLACE);
+                string message = Encoding.ASCII.GetString(bytes).Replace(NEW_LINE, NEW_LINE_REPLACE);
 
-                Defiler.Log(lastHadNewLine ? (LINE_PREFIX + displayMsg) : displayMsg);
-
-                lastHadNewLine = message.Length != displayMsg.Length;
+                if (firstMessage)
+                {
+                    Defiler.Log(LINE_PREFIX + message);
+                    firstMessage = false;
+                }
+                else
+                {
+                    Defiler.Log(message);
+                }
 
                 StartListening();
             }
