@@ -67,12 +67,12 @@ namespace VitaDefiler
 
                     if (firstMessage)
                     {
-                        Defiler.Log(LINE_PREFIX + message);
+                        Defiler.Log(LINE_PREFIX + "{0}", message);
                         firstMessage = false;
                     }
                     else
                     {
-                        Defiler.Log(message);
+                        Defiler.Log("{0}", message);
                     }
 
                     StartListening();
